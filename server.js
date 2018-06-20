@@ -1,6 +1,6 @@
 var express = require('express');
 var app = express();
-var path = require('path')
+const parser = require('body-parser');
 const MongoClient = require('mongodb').MongoClient;
 const ObjectId = require('mongodb').ObjectId
 
