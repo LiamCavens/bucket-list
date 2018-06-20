@@ -14,7 +14,7 @@ const appStart = function(){
 }
 
 const drawMap = function () {
-    const mapDiv = document.getElementById ("map");
+    const mapDiv = document.getElementById("map");
     mainMap = new MapWrapper (mapDiv, [0, 0], 2);
 
 }

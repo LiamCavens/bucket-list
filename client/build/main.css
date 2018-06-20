@@ -1,3 +1,13 @@
+h1 {
+  text-align: center;
+  font-size: 45px;
+}
+
+#select-list {
+  display: grid;
+  grid-template-columns: 33% 33% 33%;
+}
+
 table, th, td {
 
    border: 1px solid black;
@@ -9,10 +19,7 @@ body{
   font-family: 'Raleway', sans-serif;
 }
 
-#map{
-  height: 250px;
-  width: 250px;
-}
+
 
 table {
   margin: 0 auto;
@@ -26,11 +33,34 @@ select{
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  display: inline-block;
-  margin-left: 150px;
-  margin-bottom: 5px;
   padding:10px 50px 10px 50px;
   background: url("images/dropdown.png") no-repeat 95% center;
   border-color: black;
   border-radius: 10px;
+  grid-column: 2;
+}
+
+#main-content {
+  background-color: silver;
+  width: 100vw;
+  display: grid;
+  grid-template-columns: 20% 60% 20%;
+}
+
+#to-see-list {
+  grid-column: 1;
+  text-align: center;
+}
+
+#visited-list{
+  grid-column: 3;
+  text-align: center;
+}
+
+#map {
+  align-self: center;
+  justify-self: center;
+  grid-column: 2;
+  height: 300px;
+  width: 500px;
 }
