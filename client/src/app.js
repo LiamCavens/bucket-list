@@ -1,7 +1,10 @@
-var UI = require('./views/ui');
+const countryView = require('./views/countryView');
+const Request = require('./services/request.js');
 
-var app = function(){
-  new UI();
+const request = new Request('http://localhost:3000/buckit');
+
+const appStart = function(){
+
+console.log("Hello");
 }
-
-window.addEventListener('load', app);
+window.addEventListener('DOMContentLoaded', appStart);
