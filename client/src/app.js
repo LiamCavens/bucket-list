@@ -1,13 +1,22 @@
-const countryView = require('./views/countryView');
-const Request = require('../services/request.js');
-
+const Country = require('./models/Country');
+const MapWrapper = require('./models/MapWrapper');
+const CountryView = require('./views/countryView');
+const countryView = new CountryView();
+console.log(countryView);
+const Request = require('./services/request.js');
 const request = new Request('http://localhost:3000/buckit');
 
 const appStart = function(){
   const url = "https://restcountries.eu/rest/v2/all";
   makeRequest(url, requestCompleteCountry);
-
   console.log("Hello");
+  drawMap();
+}
+
+const drawMap = function () {
+    const mapDiv = document.getElementById ("map");
+    mainMap = new MapWrapper (mapDiv, [0, 0], 2);
+
 }
 
 const makeRequest = function (url, callbackFunction) {
@@ -19,7 +28,6 @@ const makeRequest = function (url, callbackFunction) {
 
 const requestCompleteCountry = function(){
   if (this.status !== 200) return;
-
   const countries = JSON.parse(this.response);
   populateList(countries);
 }
@@ -31,7 +39,21 @@ const populateList = function(countries) {
     option.textContent = `${country.name}`;
     option.value = JSON.stringify(country);
     select.appendChild(option);
+    select.addEventListener('change', handleSelectChange);
   });
 };
+
+const handleSelectChange = function(){
+  let selectedCountry = JSON.parse(this.value)
+  let name = selectedCountry.name;
+  let capital = selectedCountry.capital;
+  let coords = selectedCountry.latlng;
+  let flag = selectedCountry.flag;
+  let pickedCountry = new Country({name: name, capital: capital, coordinates: coords, flag: flag})
+  console.log(countryView);
+  countryView.addToBucketList(pickedCountry)
+}
+
+
 
 window.addEventListener('load', appStart);

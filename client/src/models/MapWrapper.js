@@ -11,3 +11,5 @@ MapWrapper.prototype.addMarker = function (coords, text) {
   const marker = L.marker(coords).addTo(this.map);
   marker.bindPopup(text).openPopup()
 };
+
+module.exports = MapWrapper;

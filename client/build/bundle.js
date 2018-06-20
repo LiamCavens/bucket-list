@@ -67,16 +67,25 @@
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const countryView = __webpack_require__(1);
+const Country = __webpack_require__(3);
+const MapWrapper = __webpack_require__(4);
+const CountryView = __webpack_require__(1);
+const countryView = new CountryView();
+console.log(countryView);
 const Request = __webpack_require__(2);
-
 const request = new Request('http://localhost:3000/buckit');
 
 const appStart = function(){
   const url = "https://restcountries.eu/rest/v2/all";
   makeRequest(url, requestCompleteCountry);
-
   console.log("Hello");
+  drawMap();
+}
+
+const drawMap = function () {
+    const mapDiv = document.getElementById ("map");
+    mainMap = new MapWrapper (mapDiv, [0, 0], 2);
+
 }
 
 const makeRequest = function (url, callbackFunction) {
@@ -88,7 +97,6 @@ const makeRequest = function (url, callbackFunction) {
 
 const requestCompleteCountry = function(){
   if (this.status !== 200) return;
-
   const countries = JSON.parse(this.response);
   populateList(countries);
 }
@@ -100,8 +108,22 @@ const populateList = function(countries) {
     option.textContent = `${country.name}`;
     option.value = JSON.stringify(country);
     select.appendChild(option);
+    select.addEventListener('change', handleSelectChange);
   });
 };
+
+const handleSelectChange = function(){
+  let selectedCountry = JSON.parse(this.value)
+  let name = selectedCountry.name;
+  let capital = selectedCountry.capital;
+  let coords = selectedCountry.latlng;
+  let flag = selectedCountry.flag;
+  let pickedCountry = new Country({name: name, capital: capital, coordinates: coords, flag: flag})
+  console.log(countryView);
+  countryView.addToBucketList(pickedCountry)
+}
+
+
 
 window.addEventListener('load', appStart);
 
@@ -110,12 +132,30 @@ window.addEventListener('load', appStart);
 /* 1 */
 /***/ (function(module, exports) {
 
-var countryView = function(){
-  this.toSee = [];
-  this.Seen = [];
+var CountryView = function(){
+  this.bucketList = [];
+  this.seen = [];
 }
 
-module.exports = countryView;
+CountryView.prototype.addToBucketList = function(country) {
+  this.bucketList.push(country);
+  this.render(country);
+}
+
+
+CountryView.prototype.render = function(country){
+
+    const ul = document.querySelector('#countries-list');
+    const li = document.createElement('li');
+    const PTag = document.createElement('p');
+    PTag.innerText = `${country.name} - "${country.capital}"`;
+    PTag.src = country.flag
+    li.appendChild(PTag);
+    ul.appendChild(li);
+}
+
+
+module.exports = CountryView;
 
 
 /***/ }),
@@ -128,6 +168,42 @@ const Request = function(url) {
 
 
 module.exports = Request;
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports) {
+
+const Country = function(options){
+this.name = options.name;
+this.capital = options.capital;
+this.coordinates = options.coordinates;
+this.flag = options.flag
+
+}
+
+module.exports = Country;
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports) {
+
+const MapWrapper = function (element, coords, zoom) {
+  const osmLayer = new L.TileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png");
+ this.map = L.map(element).addLayer(osmLayer).setView(coords, zoom);
+}
+
+MapWrapper.prototype.flyTo = function (coords, zoom) {
+    this.map.flyTo(coords, zoom);
+};
+
+MapWrapper.prototype.addMarker = function (coords, text) {
+  const marker = L.marker(coords).addTo(this.map);
+  marker.bindPopup(text).openPopup()
+};
+
+module.exports = MapWrapper;
 
 
 /***/ })
