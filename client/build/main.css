@@ -52,6 +52,10 @@ select{
   text-align: center;
 }
 
+#to-see-list p {
+  text-align: left;
+}
+
 #visited-list{
   grid-column: 3;
   text-align: center;
