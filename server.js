@@ -30,6 +30,10 @@ app.get('/buckit', function (req, res, next) {
   })
 });
 
+app.post('/buckit', function (req, res, next) {
+  
+})
+
 
 var server = app.listen(3000, function () {
   var host = server.address().address;
