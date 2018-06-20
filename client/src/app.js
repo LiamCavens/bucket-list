@@ -12,7 +12,7 @@ const appStart = function(){
 
 const makeRequest = function (url, callbackFunction) {
   const request = new XMLHttpRequest();
-  request.open("GET", this.url);
+  request.open("GET", url);
   request.addEventListener("load", callbackFunction);
   request.send();
 }
