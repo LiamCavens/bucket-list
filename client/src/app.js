@@ -1,5 +1,5 @@
 const countryView = require('./views/countryView');
-const Request = require('./services/request.js');
+const Request = require('../services/request.js');
 
 const request = new Request('http://localhost:3000/buckit');
 

@@ -68,7 +68,7 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 const countryView = __webpack_require__(1);
-const Request = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./services/request.js\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+const Request = __webpack_require__(2);
 
 const request = new Request('http://localhost:3000/buckit');
 
@@ -116,6 +116,18 @@ var countryView = function(){
 }
 
 module.exports = countryView;
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports) {
+
+const Request = function(url) {
+  this.url = url;
+}
+
+
+module.exports = Request;
 
 
 /***/ })
