@@ -67,11 +67,11 @@
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const Country = __webpack_require__(1);
-const MapWrapper = __webpack_require__(2);
-const CountryView = __webpack_require__(3);
+const Country = __webpack_require__(3);
+const MapWrapper = __webpack_require__(4);
+const CountryView = __webpack_require__(1);
 const countryView = new CountryView();
-const Request = __webpack_require__(4);
+const Request = __webpack_require__(2);
 const request = new Request('http://localhost:3000/api/buckit');
 
 const appStart = function(){
@@ -139,42 +139,6 @@ window.addEventListener('load', appStart);
 /* 1 */
 /***/ (function(module, exports) {
 
-const Country = function(options){
-this.name = options.name;
-this.capital = options.capital;
-this.coordinates = options.coordinates;
-this.flag = options.flag
-
-}
-
-module.exports = Country;
-
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports) {
-
-const MapWrapper = function (element, coords, zoom) {
-  const osmLayer = new L.TileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png");
- this.map = L.map(element).addLayer(osmLayer).setView(coords, zoom);
-}
-
-MapWrapper.prototype.flyTo = function (coords, zoom) {
-    this.map.flyTo(coords, zoom);
-};
-
-MapWrapper.prototype.addMarker = function (coords, text) {
-  const marker = L.marker(coords).addTo(this.map);
-  marker.bindPopup(text).openPopup()
-};
-
-module.exports = MapWrapper;
-
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports) {
-
 var CountryView = function(){
   this.bucketList = [];
   this.seen = [];
@@ -204,7 +168,7 @@ module.exports = CountryView;
 
 
 /***/ }),
-/* 4 */
+/* 2 */
 /***/ (function(module, exports) {
 
 const Request = function(url) {
@@ -238,6 +202,42 @@ Request.prototype.post = function (country, next) {
 };
 
 module.exports = Request;
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports) {
+
+const Country = function(options){
+this.name = options.name;
+this.capital = options.capital;
+this.coordinates = options.coordinates;
+this.flag = options.flag
+
+}
+
+module.exports = Country;
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports) {
+
+const MapWrapper = function (element, coords, zoom) {
+  const osmLayer = new L.TileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png");
+ this.map = L.map(element).addLayer(osmLayer).setView(coords, zoom);
+}
+
+MapWrapper.prototype.flyTo = function (coords, zoom) {
+    this.map.flyTo(coords, zoom);
+};
+
+MapWrapper.prototype.addMarker = function (coords, text) {
+  const marker = L.marker(coords).addTo(this.map);
+  marker.bindPopup(text).openPopup()
+};
+
+module.exports = MapWrapper;
 
 
 /***/ })
