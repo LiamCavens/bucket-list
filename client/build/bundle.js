@@ -71,7 +71,7 @@ const Country = __webpack_require__(3);
 const MapWrapper = __webpack_require__(4);
 const CountryView = __webpack_require__(1);
 const countryView = new CountryView();
-const Request = __webpack_require__(5);
+const Request = __webpack_require__(2);
 const request = new Request('http://localhost:3000/');
 
 const appStart = function(){
@@ -85,7 +85,6 @@ const appStart = function(){
 const getBuckitListCountries = function(pickedCountries){
   pickedCountries.forEach(function(country){
     countryView.addToBucketList(country);
-    console.log(pickedCountries);
   })
 }
 
@@ -133,16 +132,7 @@ const createRequestComplete = function(pickedCountry){
   countryView.addToBucketList(pickedCountry)
 };
 
-
-
 window.addEventListener('load', appStart);
-
-const handleButtonClick = function(event){
-  event.preventDefault();
-  const nameInputValue = document.querySelector('#name').value;
-  const quoteInputValue = document.querySelector('#quote').value;
-  const quoteToSend = {name: nameInputValue, quote: quoteInputValue};
-};
 
 
 /***/ }),
@@ -178,7 +168,43 @@ module.exports = CountryView;
 
 
 /***/ }),
-/* 2 */,
+/* 2 */
+/***/ (function(module, exports) {
+
+const Request = function(url) {
+  this.url = url;
+}
+
+Request.prototype.get = function (next) {
+  console.log('request get');
+  const request = new XMLHttpRequest();
+  request.open("GET", this.url);
+  request.addEventListener("load", function(){
+    console.log('before 200', this.status);
+    if(this.status !== 200) return;
+    console.log("Response:", this.response);
+    next(JSON.parse(this.response));
+    console.log('after 200', this.status);
+  });
+  request.send();
+};
+
+Request.prototype.post = function (country, next) {
+  const request = new XMLHttpRequest();
+  request.open("POST", this.url);
+  request.setRequestHeader("content-type", "application/json")
+  request.addEventListener("load", function(){
+    if(this.status !== 201) return;
+    const responseBody = JSON.parse(this.response);
+    next(responseBody);
+  })
+  request.send(JSON.stringify(country));
+};
+
+module.exports = Request;
+
+
+/***/ }),
 /* 3 */
 /***/ (function(module, exports) {
 
@@ -212,39 +238,6 @@ MapWrapper.prototype.addMarker = function (coords, text) {
 };
 
 module.exports = MapWrapper;
-
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports) {
-
-const Request = function(url) {
-  this.url = url;
-}
-
-Request.prototype.get = function (next) {
-  const request = new XMLHttpRequest();
-  request.open("GET", this.url);
-  request.addEventListener("load", function(){
-    if(this.status !== 200) return;
-      next(JSON.parse(this.response));
-  });
-  request.send();
-};
-
-Request.prototype.post = function (country, next) {
-  const request = new XMLHttpRequest();
-  request.open("POST", this.url);
-  request.setRequestHeader("content-type", "application/json")
-  request.addEventListener("load", function(){
-    if(this.status !== 201) return;
-    const responseBody = JSON.parse(this.response);
-    next(responseBody);
-  })
-  request.send(JSON.stringify(country));
-};
-
-module.exports = Request;
 
 
 /***/ })

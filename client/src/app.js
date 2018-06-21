@@ -16,7 +16,6 @@ const appStart = function(){
 const getBuckitListCountries = function(pickedCountries){
   pickedCountries.forEach(function(country){
     countryView.addToBucketList(country);
-    console.log(pickedCountries);
   })
 }
 
@@ -64,13 +63,4 @@ const createRequestComplete = function(pickedCountry){
   countryView.addToBucketList(pickedCountry)
 };
 
-
-
 window.addEventListener('load', appStart);
-
-const handleButtonClick = function(event){
-  event.preventDefault();
-  const nameInputValue = document.querySelector('#name').value;
-  const quoteInputValue = document.querySelector('#quote').value;
-  const quoteToSend = {name: nameInputValue, quote: quoteInputValue};
-};

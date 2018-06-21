@@ -1,14 +1,14 @@
 var express = require('express');
-var server = express();
 const parser = require('body-parser');
+var server = express();
 const MongoClient = require('mongodb').MongoClient;
 const ObjectId = require('mongodb').ObjectId
 
 server.use(parser.json());
 server.use(parser.urlencoded({extended: true}));
-server.use(express.static('client/build'));
+server.use(express.static("client/build"));
 
-MongoClient.connect('mongodb://localhost:27017', function(err, client){
+MongoClient.connect("mongodb://localhost:27017", function(err, client){
   if(err){
     console.log(err);
     return;
@@ -16,29 +16,29 @@ MongoClient.connect('mongodb://localhost:27017', function(err, client){
   const db = client.db("buckit");
   console.log("Connected to buckit!");
 
-  server.get('/', function (req, res) {
-  const countriesToVisit = db.collection('toVisit')
-  countriesToVisit.find().toArray(function(err, countriesToVisit, next){
-    if(err) next(err);
-    res.json(countriesToVisit);
-  })
-});
+  server.get("/api/buckit", function(req, res, next) {
+    console.log("Inside home route");
+    const countriesToVisit = db.collection('toVisit');
+    countriesToVisit.find().toArray(function(err, countriesToVisit){
+      if(err) next(err);
+      res.json(countriesToVisit);
+    })
+  });
+
   server.post("/", function(req, res){
     const countriesToVisit = db.collection('toVisit')
     const countryToSave = req.body;
     countriesToVisit.save(countryToSave, function(err, result, next){
-      if(err){
-        next(err);
-      }
+      if(err) next(err);
       res.status(201)
       res.json(result.ops[0]);
     });
   });
 
 
-server.listen(3000, function () {
-  console.log('listening on port 3000');
-});
+  server.listen(3000, function(){
+    console.log('listening on port 3000');
+  });
 
 
 })

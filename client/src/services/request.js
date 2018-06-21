@@ -3,11 +3,15 @@ const Request = function(url) {
 }
 
 Request.prototype.get = function (next) {
+  console.log('request get');
   const request = new XMLHttpRequest();
   request.open("GET", this.url);
   request.addEventListener("load", function(){
+    console.log('before 200', this.status);
     if(this.status !== 200) return;
-      next(JSON.parse(this.response));
+    console.log("Response:", this.response);
+    next(JSON.parse(this.response));
+    console.log('after 200', this.status);
   });
   request.send();
 };
