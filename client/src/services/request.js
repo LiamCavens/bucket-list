@@ -12,16 +12,6 @@ Request.prototype.get = function (next) {
   request.send();
 };
 
-Request.prototype.get = function (next) {
-  const request = new XMLHttpRequest();
-  request.open("GET", this.url);
-  request.addEventListener("load", function(){
-    if(this.status !== 200) return;
-      next(JSON.parse(this.response));
-  });
-  request.send();
-};
-
 Request.prototype.post = function (country, next) {
   const request = new XMLHttpRequest();
   request.open("POST", this.url);
