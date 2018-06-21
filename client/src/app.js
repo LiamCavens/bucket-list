@@ -40,12 +40,16 @@ const requestCompleteCountry = function(){
 
 const populateList = function(countries) {
   const select = document.querySelector('#country-list');
+  const moveButton = document.querySelector('#visit-button');
+  const deleteButton = document.querySelector('#delete-button');
   countries.forEach(function(country){
     const option = document.createElement('option');
     option.textContent = `${country.name}`;
     option.value = JSON.stringify(country);
     select.appendChild(option);
     select.addEventListener('change', handleSelectChange);
+    moveButton.addEventListener('click', handleMoveButton);
+    deleteButton.addEventListener('click', handleDeleteButton);
   });
 };
 
@@ -59,8 +63,20 @@ const handleSelectChange = function(){
   request.post(pickedCountry, createRequestComplete);
 }
 
+const handleMoveButton = function() {
+  request.post(this.value, moveRequestComplete)
+;}
+
+const handleDeleteButton = function() {
+console.log(this.value);
+}
+
 const createRequestComplete = function(pickedCountry){
   countryView.addToBucketList(pickedCountry)
 };
+
+const moveRequestComplete = function(country) {
+  countryView.moveFromBucketListToVisitedList(country);
+}
 
 window.addEventListener('load', appStart);
