@@ -7,9 +7,17 @@ const request = new Request('http://localhost:3000/');
 
 const appStart = function(){
   const url = "https://restcountries.eu/rest/v2/all";
-  makeRequest(url, requestCompleteCountry);
+  makeApiRequest(url, requestCompleteCountry);
+  request.get(getBuckitListCountries);
   console.log("Hello");
   drawMap();
+}
+
+const getBuckitListCountries = function(pickedCountries){
+  pickedCountries.forEach(function(country){
+    countryView.addToBucketList(country);
+    console.log(pickedCountries);
+  })
 }
 
 const drawMap = function () {
@@ -18,11 +26,11 @@ const drawMap = function () {
 
 }
 
-const makeRequest = function (url, callbackFunction) {
-  const request = new XMLHttpRequest();
-  request.open("GET", url);
-  request.addEventListener("load", callbackFunction);
-  request.send();
+const makeApiRequest = function (url, callbackFunction) {
+  const apiRequest = new XMLHttpRequest();
+  apiRequest.open("GET", url);
+  apiRequest.addEventListener("load", callbackFunction);
+  apiRequest.send();
 }
 
 const requestCompleteCountry = function(){
