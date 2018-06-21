@@ -3,7 +3,7 @@ const MapWrapper = require('./models/MapWrapper');
 const CountryView = require('./views/countryView');
 const countryView = new CountryView();
 const Request = require('./services/request.js');
-const request = new Request('http://localhost:3000/');
+const request = new Request('http://localhost:3000/api/buckit');
 
 const appStart = function(){
   const url = "https://restcountries.eu/rest/v2/all";
