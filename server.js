@@ -25,7 +25,7 @@ MongoClient.connect("mongodb://localhost:27017", function(err, client){
     })
   });
 
-  server.post("/", function(req, res){
+  server.post("/api/buckit", function(req, res){
     const countriesToVisit = db.collection('toVisit')
     const countryToSave = req.body;
     countriesToVisit.save(countryToSave, function(err, result, next){
