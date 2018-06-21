@@ -2,9 +2,8 @@ const Country = require('./models/Country');
 const MapWrapper = require('./models/MapWrapper');
 const CountryView = require('./views/countryView');
 const countryView = new CountryView();
-console.log(countryView);
 const Request = require('./services/request.js');
-const request = new Request('http://localhost:3000/buckit');
+const request = new Request('http://localhost:3000/');
 
 const appStart = function(){
   const url = "https://restcountries.eu/rest/v2/all";
@@ -50,10 +49,20 @@ const handleSelectChange = function(){
   let coords = selectedCountry.latlng;
   let flag = selectedCountry.flag;
   let pickedCountry = new Country({name: name, capital: capital, coordinates: coords, flag: flag})
-  console.log(countryView);
-  countryView.addToBucketList(pickedCountry)
+  request.post(pickedCountry, createRequestComplete);
 }
+
+const createRequestComplete = function(pickedCountry){
+  countryView.addToBucketList(pickedCountry)
+};
 
 
 
 window.addEventListener('load', appStart);
+
+const handleButtonClick = function(event){
+  event.preventDefault();
+  const nameInputValue = document.querySelector('#name').value;
+  const quoteInputValue = document.querySelector('#quote').value;
+  const quoteToSend = {name: nameInputValue, quote: quoteInputValue};
+};

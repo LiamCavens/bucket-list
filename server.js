@@ -17,22 +17,26 @@ MongoClient.connect('mongodb://localhost:27017', function(err, client){
   const db = client.db("buckit");
   console.log("Connected to buckit!");
 
-app.get('/buckit', function (req, res, next) {
+app.get('/', function (req, res) {
   const countriesToVisit = db.collection('toVisit')
-  const countriesVisited = db.collection('visited')
-  countriesToVisit.find().toArray(function(err, countriesToVisit){
+  countriesToVisit.find().toArray(function(err, countriesToVisit, next){
     if(err) next(err);
+    console.log(countriesToVisit);
     res.json(countriesToVisit);
   })
-  countriesVisited.find().toArray(function(err, countriesVisited){
-    if(err) next(err);
-    res.json(countriesVisited);
-  })
 });
-
-app.post('/buckit', function (req, res, next) {
-  
-})
+  app.post("/", function(req, res){
+    const countriesToVisit = db.collection('toVisit')
+    const countryToSave = req.body;
+    countriesToVisit.save(countryToSave, function(err, result, next){
+      if(err){
+        next(err);
+      }
+      console.log(countriesToVisit);
+      res.status(201)
+      res.json(result.ops[0]);
+    });
+  });
 
 
 var server = app.listen(3000, function () {

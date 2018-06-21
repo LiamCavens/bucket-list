@@ -67,13 +67,12 @@
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const Country = __webpack_require__(1);
-const MapWrapper = __webpack_require__(2);
-const CountryView = __webpack_require__(3);
+const Country = __webpack_require__(3);
+const MapWrapper = __webpack_require__(4);
+const CountryView = __webpack_require__(1);
 const countryView = new CountryView();
-console.log(countryView);
-const Request = __webpack_require__(4);
-const request = new Request('http://localhost:3000/buckit');
+const Request = __webpack_require__(2);
+const request = new Request('http://localhost:3000/');
 
 const appStart = function(){
   const url = "https://restcountries.eu/rest/v2/all";
@@ -119,53 +118,27 @@ const handleSelectChange = function(){
   let coords = selectedCountry.latlng;
   let flag = selectedCountry.flag;
   let pickedCountry = new Country({name: name, capital: capital, coordinates: coords, flag: flag})
-  console.log(countryView);
-  countryView.addToBucketList(pickedCountry)
+  request.post(pickedCountry, createRequestComplete);
 }
+
+const createRequestComplete = function(pickedCountry){
+  countryView.addToBucketList(pickedCountry)
+};
 
 
 
 window.addEventListener('load', appStart);
 
+const handleButtonClick = function(event){
+  event.preventDefault();
+  const nameInputValue = document.querySelector('#name').value;
+  const quoteInputValue = document.querySelector('#quote').value;
+  const quoteToSend = {name: nameInputValue, quote: quoteInputValue};
+};
+
 
 /***/ }),
 /* 1 */
-/***/ (function(module, exports) {
-
-const Country = function(options){
-this.name = options.name;
-this.capital = options.capital;
-this.coordinates = options.coordinates;
-this.flag = options.flag
-
-}
-
-module.exports = Country;
-
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports) {
-
-const MapWrapper = function (element, coords, zoom) {
-  const osmLayer = new L.TileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png");
- this.map = L.map(element).addLayer(osmLayer).setView(coords, zoom);
-}
-
-MapWrapper.prototype.flyTo = function (coords, zoom) {
-    this.map.flyTo(coords, zoom);
-};
-
-MapWrapper.prototype.addMarker = function (coords, text) {
-  const marker = L.marker(coords).addTo(this.map);
-  marker.bindPopup(text).openPopup()
-};
-
-module.exports = MapWrapper;
-
-
-/***/ }),
-/* 3 */
 /***/ (function(module, exports) {
 
 var CountryView = function(){
@@ -197,15 +170,71 @@ module.exports = CountryView;
 
 
 /***/ }),
-/* 4 */
+/* 2 */
 /***/ (function(module, exports) {
 
 const Request = function(url) {
   this.url = url;
 }
 
+Request.prototype.get = function (next) {
+  const request = new XMLHttpRequest();
+  request.open("GET", this.url);
+  request.addEventListener("load", function(){
+    if(this.status !== 200) return;
+      next(JSON.parse(this.response));
+  });
+  request.send();
+};
+Request.prototype.post = function (country, next) {
+  const request = new XMLHttpRequest();
+  request.open("POST", this.url);
+  request.setRequestHeader("content-type", "application/json")
+  request.addEventListener("load", function(){
+    if(this.status !== 201) return;
+    const responseBody = JSON.parse(this.response);
+    next(responseBody);
+  })
+  request.send(JSON.stringify(country));
+};
 
 module.exports = Request;
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports) {
+
+const Country = function(options){
+this.name = options.name;
+this.capital = options.capital;
+this.coordinates = options.coordinates;
+this.flag = options.flag
+
+}
+
+module.exports = Country;
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports) {
+
+const MapWrapper = function (element, coords, zoom) {
+  const osmLayer = new L.TileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png");
+ this.map = L.map(element).addLayer(osmLayer).setView(coords, zoom);
+}
+
+MapWrapper.prototype.flyTo = function (coords, zoom) {
+    this.map.flyTo(coords, zoom);
+};
+
+MapWrapper.prototype.addMarker = function (coords, text) {
+  const marker = L.marker(coords).addTo(this.map);
+  marker.bindPopup(text).openPopup()
+};
+
+module.exports = MapWrapper;
 
 
 /***/ })
