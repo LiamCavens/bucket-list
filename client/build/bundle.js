@@ -133,7 +133,7 @@ const handleSelectChange = function(){
   moveButton.addEventListener('click', handleMoveButton);
   deleteButton.addEventListener('click', handleDeleteButton);
   }
-  mainMap.flyTo(coords, 10);
+  mainMap.flyTo(coords, 7);
   mainMap.addMarker(coords, name);
   request.post(pickedCountry, createRequestComplete);
 }
