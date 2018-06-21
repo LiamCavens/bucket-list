@@ -16,6 +16,7 @@ const appStart = function(){
 const getBuckitListCountries = function(pickedCountries){
   pickedCountries.forEach(function(country){
     countryView.addToBucketList(country);
+    mainMap.addMarker(country.coordinates, country.name);
   })
 }
 
@@ -71,7 +72,6 @@ const handleSelectChange = function(){
 
 const handleMoveButton = function() {
   let selectedCountry = JSON.parse(this.value)
-  console.log(selectedCountry);
   request.post(selectedCountry, moveRequestComplete)
 ;}
 
