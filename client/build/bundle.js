@@ -109,16 +109,14 @@ const requestCompleteCountry = function(){
 
 const populateList = function(countries) {
   const select = document.querySelector('#country-list');
-  const moveButton = document.querySelector('#visit-button');
-  const deleteButton = document.querySelector('#delete-button');
+
   countries.forEach(function(country){
     const option = document.createElement('option');
     option.textContent = `${country.name}`;
     option.value = JSON.stringify(country);
     select.appendChild(option);
     select.addEventListener('change', handleSelectChange);
-    moveButton.addEventListener('click', handleMoveButton);
-    deleteButton.addEventListener('click', handleDeleteButton);
+
   });
 };
 
@@ -129,6 +127,10 @@ const handleSelectChange = function(){
   let coords = selectedCountry.latlng;
   let flag = selectedCountry.flag;
   let pickedCountry = new Country({name: name, capital: capital, coordinates: coords, flag: flag})
+  const moveButton = document.querySelector('#visit-button');
+  const deleteButton = document.querySelector('#delete-button');
+  moveButton.addEventListener('click', handleMoveButton);
+  deleteButton.addEventListener('click', handleDeleteButton);
   mainMap.flyTo(coords, 10);
   mainMap.addMarker(coords, name);
   request.post(pickedCountry, createRequestComplete);
