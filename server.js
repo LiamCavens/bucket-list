@@ -17,7 +17,6 @@ MongoClient.connect("mongodb://localhost:27017", function(err, client){
   console.log("Connected to buckit!");
 
   server.get("/api/buckit", function(req, res, next) {
-    console.log("Inside home route");
     const countriesToVisit = db.collection('toVisit');
     countriesToVisit.find().toArray(function(err, countriesToVisit){
       if(err) next(err);
@@ -29,6 +28,24 @@ MongoClient.connect("mongodb://localhost:27017", function(err, client){
     const countriesToVisit = db.collection('toVisit')
     const countryToSave = req.body;
     countriesToVisit.save(countryToSave, function(err, result, next){
+      if(err) next(err);
+      res.status(201)
+      res.json(result.ops[0]);
+    });
+  });
+
+  server.get("/api/visited", function(req, res, next) {
+    const countriesVisited = db.collection('visited');
+    countriesVisited.find().toArray(function(err, countriesVisited){
+      if(err) next(err);
+      res.json(countriesVisited);
+    })
+  });
+
+  server.post("/api/visited", function(req, res){
+    const countriesVisited = db.collection('visited')
+    const countryToSave = req.body;
+    countriesVisited.save(countryToSave, function(err, result, next){
       if(err) next(err);
       res.status(201)
       res.json(result.ops[0]);

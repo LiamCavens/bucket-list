@@ -2,16 +2,12 @@ const Request = function(url) {
   this.url = url;
 }
 
-Request.prototype.get = function (next) {
-  console.log('request get');
+Request.prototype.get = function (getBuckitListCountries) {
   const request = new XMLHttpRequest();
   request.open("GET", this.url);
   request.addEventListener("load", function(){
-    console.log('before 200', this.status);
     if(this.status !== 200) return;
-    console.log("Response:", this.response);
-    next(JSON.parse(this.response));
-    console.log('after 200', this.status);
+    getBuckitListCountries(JSON.parse(this.response));
   });
   request.send();
 };
