@@ -137,7 +137,9 @@ const handleSelectChange = function(){
 }
 
 const handleMoveButton = function() {
-  request.post(this.value, moveRequestComplete)
+  let selectedCountry = JSON.parse(this.value)
+  console.log(selectedCountry);
+  request.post(selectedCountry, moveRequestComplete)
 ;}
 
 const handleDeleteButton = function() {
@@ -149,6 +151,7 @@ const createRequestComplete = function(pickedCountry){
 };
 
 const moveRequestComplete = function(country) {
+  console.log("hello");
   countryView.moveFromBucketListToVisitedList(country);
 }
 
@@ -165,8 +168,12 @@ var CountryView = function(){
 }
 
 CountryView.prototype.addToBucketList = function(country) {
+  if(country.visited === false){
   this.bucketList.push(country);
-  this.renderBucketList(country);
+  this.renderBucketList(country);}
+  if(country.visited === true){
+  this.visitedList.push(country);
+  this.renderVisitedList(country)}
 }
 
 CountryView.prototype.removeFromBucketList = function (country) {
@@ -179,11 +186,16 @@ CountryView.prototype.removeFromBucketList = function (country) {
 CountryView.prototype.addToVisitedList = function(country) {
   this.visitedList.push(country);
   this.renderVisitedList(country);
+  console.log("Hello");
 }
 
 CountryView.prototype.moveFromBucketListToVisitedList = function (country) {
-  removeFromBucketList(country);
+  // removeFromBucketList(country);
+  country.visited = true;
   addToVisitedList(country);
+
+
+
 };
 
 CountryView.prototype.renderBucketList = function(country){
@@ -266,6 +278,7 @@ this.name = options.name;
 this.capital = options.capital;
 this.coordinates = options.coordinates;
 this.flag = options.flag
+this.visited = false;
 
 }
 

@@ -68,7 +68,9 @@ const handleSelectChange = function(){
 }
 
 const handleMoveButton = function() {
-  request.post(this.value, moveRequestComplete)
+  let selectedCountry = JSON.parse(this.value)
+  console.log(selectedCountry);
+  request.post(selectedCountry, moveRequestComplete)
 ;}
 
 const handleDeleteButton = function() {
@@ -80,6 +82,7 @@ const createRequestComplete = function(pickedCountry){
 };
 
 const moveRequestComplete = function(country) {
+  console.log("hello");
   countryView.moveFromBucketListToVisitedList(country);
 }
 
