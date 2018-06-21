@@ -60,8 +60,10 @@ const handleSelectChange = function(){
   let pickedCountry = new Country({name: name, capital: capital, coordinates: coords, flag: flag})
   const moveButton = document.querySelector('#visit-button');
   const deleteButton = document.querySelector('#delete-button');
+  if(moveButton !== null){
   moveButton.addEventListener('click', handleMoveButton);
   deleteButton.addEventListener('click', handleDeleteButton);
+  }
   mainMap.flyTo(coords, 10);
   mainMap.addMarker(coords, name);
   request.post(pickedCountry, createRequestComplete);

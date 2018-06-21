@@ -67,11 +67,11 @@
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const Country = __webpack_require__(3);
-const MapWrapper = __webpack_require__(4);
-const CountryView = __webpack_require__(1);
+const Country = __webpack_require__(1);
+const MapWrapper = __webpack_require__(2);
+const CountryView = __webpack_require__(3);
 const countryView = new CountryView();
-const Request = __webpack_require__(2);
+const Request = __webpack_require__(4);
 const request = new Request('http://localhost:3000/api/buckit');
 
 const appStart = function(){
@@ -129,8 +129,10 @@ const handleSelectChange = function(){
   let pickedCountry = new Country({name: name, capital: capital, coordinates: coords, flag: flag})
   const moveButton = document.querySelector('#visit-button');
   const deleteButton = document.querySelector('#delete-button');
+  if(moveButton !== null){
   moveButton.addEventListener('click', handleMoveButton);
   deleteButton.addEventListener('click', handleDeleteButton);
+  }
   mainMap.flyTo(coords, 10);
   mainMap.addMarker(coords, name);
   request.post(pickedCountry, createRequestComplete);
@@ -160,6 +162,43 @@ window.addEventListener('load', appStart);
 
 /***/ }),
 /* 1 */
+/***/ (function(module, exports) {
+
+const Country = function(options){
+this.name = options.name;
+this.capital = options.capital;
+this.coordinates = options.coordinates;
+this.flag = options.flag
+this.visited = false;
+
+}
+
+module.exports = Country;
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports) {
+
+const MapWrapper = function (element, coords, zoom) {
+  const osmLayer = new L.TileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png");
+ this.map = L.map(element).addLayer(osmLayer).setView(coords, zoom);
+}
+
+MapWrapper.prototype.flyTo = function (coords, zoom) {
+    this.map.flyTo(coords, zoom);
+};
+
+MapWrapper.prototype.addMarker = function (coords, text) {
+  const marker = L.marker(coords).addTo(this.map);
+  marker.bindPopup(text).openPopup()
+};
+
+module.exports = MapWrapper;
+
+
+/***/ }),
+/* 3 */
 /***/ (function(module, exports) {
 
 var CountryView = function(){
@@ -237,7 +276,7 @@ module.exports = CountryView;
 
 
 /***/ }),
-/* 2 */
+/* 4 */
 /***/ (function(module, exports) {
 
 const Request = function(url) {
@@ -267,43 +306,6 @@ Request.prototype.post = function (country, next) {
 };
 
 module.exports = Request;
-
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports) {
-
-const Country = function(options){
-this.name = options.name;
-this.capital = options.capital;
-this.coordinates = options.coordinates;
-this.flag = options.flag
-this.visited = false;
-
-}
-
-module.exports = Country;
-
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports) {
-
-const MapWrapper = function (element, coords, zoom) {
-  const osmLayer = new L.TileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png");
- this.map = L.map(element).addLayer(osmLayer).setView(coords, zoom);
-}
-
-MapWrapper.prototype.flyTo = function (coords, zoom) {
-    this.map.flyTo(coords, zoom);
-};
-
-MapWrapper.prototype.addMarker = function (coords, text) {
-  const marker = L.marker(coords).addTo(this.map);
-  marker.bindPopup(text).openPopup()
-};
-
-module.exports = MapWrapper;
 
 
 /***/ })
