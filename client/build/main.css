@@ -68,3 +68,12 @@ select{
   height: 300px;
   width: 500px;
 }
+
+.list-flag{
+  height: 12px;
+  width: 18px;
+}
+
+li {
+  list-style-image: url(https://www.shareicon.net/data/12x12/2015/06/13/53579_globe_256x256.png);
+}
