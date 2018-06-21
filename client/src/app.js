@@ -60,6 +60,8 @@ const handleSelectChange = function(){
   let coords = selectedCountry.latlng;
   let flag = selectedCountry.flag;
   let pickedCountry = new Country({name: name, capital: capital, coordinates: coords, flag: flag})
+  mainMap.flyTo(coords, 10);
+  mainMap.addMarker(coords, name);
   request.post(pickedCountry, createRequestComplete);
 }
 
