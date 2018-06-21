@@ -15,8 +15,8 @@ CountryView.prototype.render = function(country){
     const ul = document.querySelector('#countries-list');
     const li = document.createElement('li');
     const PTag = document.createElement('p');
-    PTag.innerText = `${country.name} - "${country.capital}"`;
-    PTag.src = country.flag;
+    PTag.innerHTML = `<img class="list-flag" src="${country.flag}" alt="${country.name} flag"> ${country.name} - "${country.capital}"`;
+    // PTag.src = country.flag;
     li.appendChild(PTag);
     ul.appendChild(li);
     listDiv.appendChild(ul);
